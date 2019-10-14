@@ -1,26 +1,31 @@
 import React from 'react';
-import logo from './logo.svg';
+import axios from 'axios';
+
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class Listing extends React.Component {
+  state = {
+    persons: []
+  };
+
+  componentDidMount() {
+    axios.get("https://jsonplaceholder.typicode.com/posts")
+        .then(res => {
+          const persons = res.data;
+          this.setState({ persons });
+        })
+  }
+
+  render() {
+    return (
+        <ul className= "user-list">
+          { this.state.persons.map(person => <li>
+              <h2>{person.title}</h2>
+              <span>{person.body.slice(0, 100)}</span>
+          </li>)}
+        </ul>
+    )
+  }
 }
 
-export default App;
+export default Listing;
